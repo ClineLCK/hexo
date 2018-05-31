@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="ElasticSearch," />
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="笔记本">
+<meta name="description" content="安装异常报错 max file descriptors [65535] for elasticsearch process is too low, increase to at least [65536]  修改 /etc/security/limits.conf ，在文件最后添加或者修改  * hard nofile 65536  max virtual memory areas vm.max_">
+<meta name="keywords" content="ElasticSearch">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ElasticSearch 安装出错解决方案">
+<meta property="og:title" content="ElasticSearch 安装注意事项">
 <meta property="og:url" content="http://yoursite.com/2018/05/31/ElasticSearch-安装出错解决方案/index.html">
 <meta property="og:site_name" content="ClineChen KeyNote">
-<meta property="og:description" content="笔记本">
+<meta property="og:description" content="安装异常报错 max file descriptors [65535] for elasticsearch process is too low, increase to at least [65536]  修改 /etc/security/limits.conf ，在文件最后添加或者修改  * hard nofile 65536  max virtual memory areas vm.max_">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-31T08:17:31.037Z">
+<meta property="og:updated_time" content="2018-05-31T10:56:19.886Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ElasticSearch 安装出错解决方案">
-<meta name="twitter:description" content="笔记本">
+<meta name="twitter:title" content="ElasticSearch 安装注意事项">
+<meta name="twitter:description" content="安装异常报错 max file descriptors [65535] for elasticsearch process is too low, increase to at least [65536]  修改 /etc/security/limits.conf ，在文件最后添加或者修改  * hard nofile 65536  max virtual memory areas vm.max_">
 
 
 
@@ -125,7 +126,7 @@
 
 
 
-  <title>ElasticSearch 安装出错解决方案 | ClineChen KeyNote</title>
+  <title>ElasticSearch 安装注意事项 | ClineChen KeyNote</title>
   
 
 
@@ -269,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">ElasticSearch 安装出错解决方案</h1>
+          <h1 class="post-title" itemprop="name headline">ElasticSearch 安装注意事项</h1>
         
 
         <div class="post-meta">
@@ -291,6 +292,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ElasticSearch/" itemprop="url" rel="index">
+                    <span itemprop="name">ElasticSearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -319,7 +342,21 @@
       
 
       
-        
+        <h3 id="安装异常报错"><a href="#安装异常报错" class="headerlink" title="安装异常报错"></a>安装异常报错</h3><blockquote>
+<p>max file descriptors [65535] for elasticsearch process is too low, increase to at least [65536]</p>
+</blockquote>
+<p>修改 /etc/security/limits.conf ，在文件最后添加或者修改  * hard nofile 65536</p>
+<blockquote>
+<p>max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</p>
+</blockquote>
+<p>修改 /etc/sysctl.conf  ,在文件最后添加  vm.max_map_count=262144</p>
+<blockquote>
+<p>system call filters failed to install; check the logs and fix your configuration or disable system call filters at your own risk</p>
+</blockquote>
+<p>修改 /elasticsearch-6.2.4/config/elasticsearch.yml ，在文件最后添加 bootstrap.system_call_filter: false</p>
+<h3 id="es运行内存修改"><a href="#es运行内存修改" class="headerlink" title="es运行内存修改"></a>es运行内存修改</h3><p>修改 /elasticsearch-6.2.4/config/jvm.options</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">################################################################</span><br><span class="line">## IMPORTANT: JVM heap size</span><br><span class="line">################################################################</span><br><span class="line">##</span><br><span class="line">## You should always set the min and max JVM heap</span><br><span class="line">## size to the same value. For example, to set</span><br><span class="line">## the heap to 4 GB, set:</span><br><span class="line">##</span><br><span class="line">## -Xms4g</span><br><span class="line">## -Xmx4g</span><br><span class="line">##</span><br><span class="line">## See https://www.elastic.co/guide/en/elasticsearch/reference/current/heap-size.html</span><br><span class="line">## for more information</span><br><span class="line">##</span><br><span class="line">################################################################</span><br><span class="line"></span><br><span class="line"># Xms represents the initial size of total heap space</span><br><span class="line"># Xmx represents the maximum size of total heap space</span><br><span class="line"></span><br><span class="line">-Xms512m</span><br><span class="line">-Xmx512m</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -333,6 +370,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ElasticSearch/" rel="tag"># ElasticSearch</a>
+          
+        </div>
       
 
       
@@ -387,8 +430,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -410,7 +462,25 @@
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
             
 
           </nav>
@@ -430,6 +500,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装异常报错"><span class="nav-number">1.</span> <span class="nav-text">安装异常报错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#es运行内存修改"><span class="nav-number">2.</span> <span class="nav-text">es运行内存修改</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
